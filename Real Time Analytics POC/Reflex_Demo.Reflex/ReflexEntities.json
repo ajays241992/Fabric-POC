@@ -1,0 +1,23 @@
+[
+  {
+    "uniqueIdentifier": "791ceb73-40fc-4221-957e-c3ba43a15be9",
+    "payload": {
+      "name": "EventStream",
+      "metadata": {
+        "eventstreamArtifactId": "f0f55827-4e17-4c75-b529-092258b5ce7d"
+      }
+    },
+    "type": "eventstreamSource-v1"
+  },
+  {
+    "uniqueIdentifier": "d25cb7df-8859-4866-b969-42c740f3126f",
+    "payload": {
+      "name": "bike-stream-stream",
+      "definition": {
+        "type": "Event",
+        "instance": "{\"templateId\":\"SourceEvent\",\"templateVersion\":\"1.1\",\"steps\":[{\"name\":\"SourceEventStep\",\"id\":\"9e818313-32cb-443c-ad79-384894984c94\",\"rows\":[{\"name\":\"SourceSelector\",\"kind\":\"SourceReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"791ceb73-40fc-4221-957e-c3ba43a15be9\"}]}]}]}"
+      }
+    },
+    "type": "timeSeriesView-v1"
+  }
+]

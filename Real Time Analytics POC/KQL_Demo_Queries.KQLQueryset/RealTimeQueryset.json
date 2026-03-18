@@ -1,0 +1,22 @@
+{
+  "queryset": {
+    "version": "1.0.0",
+    "dataSources": [
+      {
+        "id": "69cbca70-c3a2-4d18-9098-4bab7e774b04",
+        "clusterUri": "",
+        "type": "Fabric",
+        "databaseItemId": "4570be26-eb02-b591-4ceb-52a0dc0e2368",
+        "databaseItemName": "Realtime_Eventhouse"
+      }
+    ],
+    "tabs": [
+      {
+        "id": "e37dcb7c-c021-4939-b486-4627fbb856c8",
+        "content": "//***********************************************************************************************************\n// Here are two articles to help you get started with KQL:\n// KQL reference guide - https://aka.ms/KQLguide\n// SQL - KQL conversions - https://aka.ms/sqlcheatsheet\n//***********************************************************************************************************\n\n// Use \"take\" to view a sample number of records in the table and check the data.\nYOUR_TABLE_HERE\n| take 100\n\n// See how many records are in the table.\nYOUR_TABLE_HERE\n| count\n\n// This query returns the number of ingestions per hour in the given table.\nYOUR_TABLE_HERE\n| summarize IngestionCount = count() by bin(ingestion_time(), 1h)\n\nWeather\n| where EventType == \"Winter Storm\"\n\n",
+        "title": "",
+        "dataSourceId": "69cbca70-c3a2-4d18-9098-4bab7e774b04"
+      }
+    ]
+  }
+}

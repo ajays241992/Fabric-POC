@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Eventstream",
+    "displayName": "Stock-market-stream"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "3e78e293-a508-bd1e-4809-a18c270221bd"
+  }
+}
