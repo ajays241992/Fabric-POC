@@ -1,0 +1,130 @@
+table nyctaxi_yellow
+	lineageTag: 1a69e526-d7ab-4eae-ad46-53d5cc0d9c4d
+	sourceLineageTag: [dbo].[nyctaxi_yellow]
+
+	column vendor
+		dataType: string
+		sourceProviderType: varchar(50)
+		lineageTag: 3181dd23-6397-40ae-888d-d978f80144a3
+		sourceLineageTag: vendor
+		summarizeBy: none
+		sourceColumn: vendor
+
+		annotation SummarizationSetBy = Automatic
+
+	column tpep_pickup_datetime
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: f723ed93-acfb-4a0a-b5fe-1a36a1a19bc5
+		sourceLineageTag: tpep_pickup_datetime
+		summarizeBy: none
+		sourceColumn: tpep_pickup_datetime
+
+		annotation SummarizationSetBy = Automatic
+
+	column tpep_dropoff_datetime
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: 150ebd7f-fde5-4136-9fda-d5e4c3d3bdec
+		sourceLineageTag: tpep_dropoff_datetime
+		summarizeBy: none
+		sourceColumn: tpep_dropoff_datetime
+
+		annotation SummarizationSetBy = Automatic
+
+	column pu_borough
+		dataType: string
+		sourceProviderType: varchar(100)
+		lineageTag: 05965ea3-eaa9-424c-8267-424394694a80
+		sourceLineageTag: pu_borough
+		summarizeBy: none
+		sourceColumn: pu_borough
+
+		annotation SummarizationSetBy = Automatic
+
+	column pu_zone
+		dataType: string
+		sourceProviderType: varchar(100)
+		lineageTag: f0fbfb4b-ac11-49ed-8e64-26ec402f2758
+		sourceLineageTag: pu_zone
+		summarizeBy: none
+		sourceColumn: pu_zone
+
+		annotation SummarizationSetBy = Automatic
+
+	column do_borough
+		dataType: string
+		sourceProviderType: varchar(100)
+		lineageTag: f0e4f9b5-cc17-4786-8f77-98a27b13e513
+		sourceLineageTag: do_borough
+		summarizeBy: none
+		sourceColumn: do_borough
+
+		annotation SummarizationSetBy = Automatic
+
+	column do_zone
+		dataType: string
+		sourceProviderType: varchar(100)
+		lineageTag: f301ad4e-20c1-45a1-b89a-f958c873c056
+		sourceLineageTag: do_zone
+		summarizeBy: none
+		sourceColumn: do_zone
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_method
+		dataType: string
+		sourceProviderType: varchar(50)
+		lineageTag: 52debcd9-1cfd-4f15-84aa-6c37894f47f6
+		sourceLineageTag: payment_method
+		summarizeBy: none
+		sourceColumn: payment_method
+
+		annotation SummarizationSetBy = Automatic
+
+	column passenger_count
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 9e990555-c086-4171-a4dd-e21a706509e2
+		sourceLineageTag: passenger_count
+		summarizeBy: sum
+		sourceColumn: passenger_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column trip_distance
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 2f94a2e5-8420-4293-9296-497bd243a9d5
+		sourceLineageTag: trip_distance
+		summarizeBy: sum
+		sourceColumn: trip_distance
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_amount
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 66b209c9-89c1-45cb-a131-6395f48c77e7
+		sourceLineageTag: total_amount
+		summarizeBy: sum
+		sourceColumn: total_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition nyctaxi_yellow = entity
+		mode: directLake
+		source
+			entityName: nyctaxi_yellow
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

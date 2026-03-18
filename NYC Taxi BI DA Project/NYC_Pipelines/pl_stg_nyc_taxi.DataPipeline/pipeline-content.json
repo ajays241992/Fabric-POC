@@ -1,0 +1,298 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "ParquetSource",
+            "storeSettings": {
+              "type": "LakehouseReadSettings",
+              "recursive": true,
+              "enablePartitionDiscovery": false
+            },
+            "formatSettings": {
+              "type": "ParquetReadSettings"
+            },
+            "datasetSettings": {
+              "type": "Parquet",
+              "typeProperties": {
+                "location": {
+                  "type": "LakehouseLocation",
+                  "folderPath": "taxi_trip_record",
+                  "fileName": {
+                    "value": "@concat('yellow_tripdata_',variables('v_date'),'.parquet')",
+                    "type": "Expression"
+                  }
+                },
+                "compressionCodec": "snappy"
+              },
+              "schema": [],
+              "linkedService": {
+                "name": "NYC_Lakehouse",
+                "properties": {
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "artifactId": "d81c71ad-b183-b990-45fa-d5c0fa117b68",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                    "rootFolder": "Files"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "DataWarehouseSink",
+            "preCopyScript": "delete from stg.nyc_taxi_yellow_trip",
+            "allowCopyCommand": true,
+            "copyCommandSettings": {},
+            "disableMetricsCollection": false,
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "stg",
+                "table": "nyc_taxi_yellow_trip"
+              },
+              "schema": [],
+              "linkedService": {
+                "name": "NYC_Warehouse",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "26306c76-3fec-406d-8d93-049ba59b37ec",
+                    "endpoint": "wfwudvup2boufbu3auw5gn73pq-6gdlwqmxed2elch3kcmvy36sea.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "41bb86f1-2097-45f4-88fb-50995c6fd220"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Copy Trip Records",
+        "dependsOn": [
+          {
+            "activity": "v_date",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "SqlServerStoredProcedure",
+        "typeProperties": {
+          "storedProcedureName": "[stg].[data_cleaning_nyc_yellow_trip_record]",
+          "storedProcedureParameters": {
+            "end_date": {
+              "value": {
+                "value": "@variables('v_end_date')",
+                "type": "Expression"
+              },
+              "type": "DateTime"
+            },
+            "start_date": {
+              "value": {
+                "value": "@concat(variables('v_date'),'-01')",
+                "type": "Expression"
+              },
+              "type": "DateTime"
+            }
+          }
+        },
+        "linkedService": {
+          "name": "NYC_Warehouse",
+          "properties": {
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "artifactId": "26306c76-3fec-406d-8d93-049ba59b37ec",
+              "endpoint": "wfwudvup2boufbu3auw5gn73pq-6gdlwqmxed2elch3kcmvy36sea.datawarehouse.fabric.microsoft.com",
+              "workspaceId": "41bb86f1-2097-45f4-88fb-50995c6fd220"
+            },
+            "annotations": []
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "SP to remove outlier data",
+        "dependsOn": [
+          {
+            "activity": "v_end_date",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "SetVariable",
+        "typeProperties": {
+          "variableName": "v_end_date",
+          "value": {
+            "value": "@addToTime(concat(variables('v_date'),'-01'),1,'Month')",
+            "type": "Expression"
+          }
+        },
+        "policy": {
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "v_end_date",
+        "dependsOn": [
+          {
+            "activity": "Copy Trip Records",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "SqlServerStoredProcedure",
+        "typeProperties": {
+          "storedProcedureName": "[metadata].[insert_staging_metadata]",
+          "storedProcedureParameters": {
+            "pipeline_run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "String"
+            },
+            "processed_date": {
+              "value": {
+                "value": "@pipeline().TriggerTime",
+                "type": "Expression"
+              },
+              "type": "DateTime"
+            },
+            "table_name": {
+              "value": "stg.nyc_taxi_yellow_trip",
+              "type": "String"
+            }
+          }
+        },
+        "linkedService": {
+          "name": "NYC_Warehouse",
+          "properties": {
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "artifactId": "26306c76-3fec-406d-8d93-049ba59b37ec",
+              "endpoint": "wfwudvup2boufbu3auw5gn73pq-6gdlwqmxed2elch3kcmvy36sea.datawarehouse.fabric.microsoft.com",
+              "workspaceId": "41bb86f1-2097-45f4-88fb-50995c6fd220"
+            },
+            "annotations": []
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "SP to load staging metadata",
+        "dependsOn": [
+          {
+            "activity": "SP to remove outlier data",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Script",
+        "typeProperties": {
+          "scripts": [
+            {
+              "text": {
+                "value": "SELECT TOP 1\n\nlatest_processed_pickup\n\nFROM metadata.processing_log\n\nwhere table_processed = 'stg.nyc_taxi_yellow_trip'\n\norder by latest_processed_pickup desc;",
+                "type": "Expression"
+              },
+              "type": "Query"
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        },
+        "linkedService": {
+          "name": "NYC_Warehouse",
+          "properties": {
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "artifactId": "26306c76-3fec-406d-8d93-049ba59b37ec",
+              "endpoint": "wfwudvup2boufbu3auw5gn73pq-6gdlwqmxed2elch3kcmvy36sea.datawarehouse.fabric.microsoft.com",
+              "workspaceId": "41bb86f1-2097-45f4-88fb-50995c6fd220"
+            },
+            "annotations": []
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Latest Processed File",
+        "dependsOn": []
+      },
+      {
+        "type": "SetVariable",
+        "typeProperties": {
+          "variableName": "v_date",
+          "value": {
+            "value": "@formatDateTime(addToTime(activity('Latest Processed File').output.resultSets[0].rows[0].latest_processed_pickup,1,'Month'),'yyyy-MM')",
+            "type": "Expression"
+          }
+        },
+        "policy": {
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "v_date",
+        "dependsOn": [
+          {
+            "activity": "Latest Processed File",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "variables": {
+      "v_date": {
+        "type": "String",
+        "defaultValue": "2024-01"
+      },
+      "v_end_date": {
+        "type": "String"
+      }
+    }
+  }
+}

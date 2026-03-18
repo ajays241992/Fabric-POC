@@ -1,0 +1,38 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {},
+  "name": "Dataflow 1",
+  "queryGroups": [],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "stg nyc_taxi_yellow_trip": {
+      "queryId": "4f12cbf4-876d-40bd-8442-1457e0db2ae1",
+      "queryName": "stg nyc_taxi_yellow_trip"
+    },
+    "stg taxi_zone_lookup": {
+      "queryId": "a726a68a-ea6d-43ea-8c62-f95db837d29d",
+      "queryName": "stg taxi_zone_lookup"
+    },
+    "Merge": {
+      "queryId": "d0560575-65a3-4d43-8d36-10bf42d5e034",
+      "queryName": "Merge"
+    },
+    "Merge (2)": {
+      "queryId": "04edb3c1-684a-4e18-a81d-1725149c10cd",
+      "queryName": "Merge (2)"
+    },
+    "Merge (2)_DataDestination": {
+      "queryId": "8945272f-8d7a-4a2a-a151-06af5562e538",
+      "queryName": "Merge (2)_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "connections": [
+    {
+      "path": "Warehouse",
+      "kind": "Warehouse",
+      "connectionId": "{\"ClusterId\":\"239e5484-cb37-40df-a15d-149764169a30\",\"DatasourceId\":\"b95df7da-3c8a-4979-9249-57711f39fa54\"}"
+    }
+  ]
+}
