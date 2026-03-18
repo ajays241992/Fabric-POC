@@ -1,0 +1,14 @@
+[
+  {
+    "name": "landing-zone",
+    "path": "/Files",
+    "target": {
+      "type": "AdlsGen2",
+      "adlsGen2": {
+        "connectionId": "02dfb78e-ecd7-4438-8031-9fdc450a3af6",
+        "location": "https://nyctaxiyellowde.dfs.core.windows.net",
+        "subpath": "/landing-zone"
+      }
+    }
+  }
+]

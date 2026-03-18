@@ -1,0 +1,164 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "SetVariable",
+        "typeProperties": {
+          "variableName": "processing_timestamp",
+          "value": {
+            "value": "@pipeline().TriggerTime",
+            "type": "Expression"
+          }
+        },
+        "policy": {
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Set Processing Timestamp",
+        "dependsOn": []
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "2dbb385e-ffdf-9f43-4d02-78fa15360341",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "processing_timestamp": {
+              "value": {
+                "value": "@variables('processing_timestamp')",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Bronze Data Processing",
+        "dependsOn": [
+          {
+            "activity": "Set Processing Timestamp",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Delete",
+        "typeProperties": {
+          "enableLogging": false,
+          "datasetSettings": {
+            "type": "Binary",
+            "typeProperties": {
+              "location": {
+                "type": "AzureBlobFSLocation",
+                "fileSystem": "landing-zone"
+              }
+            },
+            "externalReferences": {
+              "connection": "02dfb78e-ecd7-4438-8031-9fdc450a3af6"
+            },
+            "annotations": []
+          },
+          "storeSettings": {
+            "type": "AzureBlobFSReadSettings",
+            "recursive": true,
+            "wildcardFileName": "*",
+            "enablePartitionDiscovery": false
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Delete Landing Zone Data",
+        "dependsOn": [
+          {
+            "activity": "Bronze Data Processing",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "be8870ef-1e6d-807f-4bb1-52a9865fe912",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "processing_timestamp": {
+              "value": {
+                "value": "@variables('processing_timestamp')",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Silver Data Processing",
+        "dependsOn": [
+          {
+            "activity": "Delete Landing Zone Data",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "a482e306-4d1c-a653-4249-01905227dcf8",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "processing_timestamp": {
+              "value": {
+                "value": "@variables('processing_timestamp')",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Gold Data Processing",
+        "dependsOn": [
+          {
+            "activity": "Silver Data Processing",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "variables": {
+      "processing_timestamp": {
+        "type": "String"
+      }
+    }
+  }
+}

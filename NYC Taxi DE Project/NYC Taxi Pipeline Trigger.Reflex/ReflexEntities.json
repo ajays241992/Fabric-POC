@@ -1,0 +1,94 @@
+[
+  {
+    "uniqueIdentifier": "aded6237-65a2-4baf-b80a-6689de98aeea",
+    "payload": {
+      "name": "nyctaxiyellowde",
+      "description": "Container Description",
+      "type": "rthSubscriptions"
+    },
+    "type": "container-v1"
+  },
+  {
+    "uniqueIdentifier": "7ce8b3cc-5c82-42f7-8110-64f26a0e3d7e",
+    "payload": {
+      "name": "Fabric item action",
+      "fabricItem": {
+        "itemId": "f65b16fe-e00e-9dda-489f-daa5d9b913f8",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "itemType": "Pipeline"
+      },
+      "jobType": "Pipeline",
+      "parentContainer": {
+        "targetUniqueIdentifier": "aded6237-65a2-4baf-b80a-6689de98aeea"
+      }
+    },
+    "type": "fabricItemAction-v1"
+  },
+  {
+    "uniqueIdentifier": "f1c57fb8-9161-4378-a6b4-973d483294a7",
+    "payload": {
+      "name": "nyctaxiyellowde event",
+      "connection": {
+        "scope": "SubArtifact",
+        "tenantId": "d6416db1-d08f-425d-869b-052dd337fb7c",
+        "workspaceId": "32157a80-eb85-4a12-93ce-26cb65afdd07",
+        "artifactId": "c4daec28-9f16-40f6-87d3-0b91fb4f0a96",
+        "subArtifactId": "f1bca220-a05f-4efc-98be-f3e19dbe127b",
+        "subArtifactDisplayName": "/subscriptions/a07d2772-86b8-43de-8fef-44012abc2cf7/resourceGroups/rg-fabric-dev-indiasouth/providers/Microsoft.Storage/storageAccounts/nyctaxiyellowde",
+        "eventGroupType": "Microsoft.Storage.StorageAccounts"
+      },
+      "filterSettings": {
+        "eventTypes": [
+          {
+            "name": "Microsoft.Storage.BlobCreated"
+          }
+        ],
+        "filters": [
+          {
+            "values": [
+              "landing-zone"
+            ],
+            "operatorType": "StringContains",
+            "key": "data.url"
+          }
+        ]
+      },
+      "parentContainer": {
+        "targetUniqueIdentifier": "aded6237-65a2-4baf-b80a-6689de98aeea"
+      }
+    },
+    "type": "realTimeHubSource-v1"
+  },
+  {
+    "uniqueIdentifier": "653bbde5-8273-48f4-ae26-3c3d476d4643",
+    "payload": {
+      "name": "nyctaxiyellowde event",
+      "parentContainer": {
+        "targetUniqueIdentifier": "aded6237-65a2-4baf-b80a-6689de98aeea"
+      },
+      "definition": {
+        "type": "Event",
+        "instance": "{\"steps\":[{\"id\":\"42af6c59-c8a6-47d6-8c17-681f3f445d52\",\"name\":\"SourceEventStep\",\"rows\":[{\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"f1c57fb8-9161-4378-a6b4-973d483294a7\"}],\"kind\":\"SourceReference\",\"name\":\"SourceSelector\"}]}],\"templateId\":\"SourceEvent\",\"templateVersion\":\"1.2.3\"}"
+      }
+    },
+    "type": "timeSeriesView-v1"
+  },
+  {
+    "uniqueIdentifier": "2be3ed69-43bb-403c-804c-37087a764582",
+    "payload": {
+      "name": "File Based Trigger",
+      "parentContainer": {
+        "targetUniqueIdentifier": "aded6237-65a2-4baf-b80a-6689de98aeea"
+      },
+      "definition": {
+        "type": "Rule",
+        "instance": "{\"templateId\":\"EventTrigger\",\"templateVersion\":\"1.2.3\",\"steps\":[{\"name\":\"FieldsDefaultsStep\",\"id\":\"247a1d8f-672b-43d4-88d1-41961e28e1aa\",\"rows\":[{\"name\":\"EventSelector\",\"kind\":\"Event\",\"arguments\":[{\"kind\":\"EventReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"653bbde5-8273-48f4-ae26-3c3d476d4643\"}],\"name\":\"event\"}]}]},{\"name\":\"EventDetectStep\",\"id\":\"dcc52e30-0963-4c08-a3bc-e5f8765dda22\",\"rows\":[{\"name\":\"OnEveryValue\",\"kind\":\"OnEveryValue\",\"arguments\":[]}]},{\"name\":\"ActStep\",\"id\":\"46bd9e19-71bf-4229-9341-e0894742bd48\",\"rows\":[{\"name\":\"FabricItemBinding\",\"kind\":\"FabricItemInvocation\",\"arguments\":[{\"name\":\"workspaceId\",\"type\":\"string\",\"value\":\"00000000-0000-0000-0000-000000000000\"},{\"name\":\"itemId\",\"type\":\"string\",\"value\":\"f65b16fe-e00e-9dda-489f-daa5d9b913f8\"},{\"name\":\"itemType\",\"type\":\"string\",\"value\":\"Pipeline\"},{\"name\":\"jobType\",\"type\":\"string\",\"value\":\"Pipeline\"},{\"name\":\"fabricJobConnectionDocumentId\",\"type\":\"string\",\"value\":\"7ce8b3cc-5c82-42f7-8110-64f26a0e3d7e\"},{\"name\":\"parameters\",\"type\":\"array\",\"values\":[{\"kind\":\"FabricItemParameter\",\"type\":\"complex\",\"arguments\":[{\"name\":\"parameterName\",\"type\":\"string\",\"value\":\"Type\"},{\"name\":\"parameterValue\",\"type\":\"complexArray\",\"values\":[{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"___type\"}]}]},{\"name\":\"parameterType\",\"type\":\"string\",\"value\":\"String\"}]},{\"kind\":\"FabricItemParameter\",\"type\":\"complex\",\"arguments\":[{\"name\":\"parameterName\",\"type\":\"string\",\"value\":\"Subject\"},{\"name\":\"parameterValue\",\"type\":\"complexArray\",\"values\":[{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"___subject\"}]}]},{\"name\":\"parameterType\",\"type\":\"string\",\"value\":\"String\"}]},{\"kind\":\"FabricItemParameter\",\"type\":\"complex\",\"arguments\":[{\"name\":\"parameterName\",\"type\":\"string\",\"value\":\"Source\"},{\"name\":\"parameterValue\",\"type\":\"complexArray\",\"values\":[{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"___source\"}]}]},{\"name\":\"parameterType\",\"type\":\"string\",\"value\":\"String\"}]}]},{\"name\":\"additionalInformation\",\"type\":\"array\",\"values\":[]}]}]}]}",
+        "settings": {
+          "shouldRun": true,
+          "shouldApplyRuleOnUpdate": false
+        }
+      }
+    },
+    "type": "timeSeriesView-v1"
+  }
+]

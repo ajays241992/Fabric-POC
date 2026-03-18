@@ -1,0 +1,33 @@
+{
+  "sources": [
+    {
+      "id": "72bc7a49-7136-4e66-95e3-5dcf811995ea",
+      "name": "EventLinks",
+      "type": "AzureBlobStorageEvents",
+      "properties": {
+        "azureBlobStorageEvents": [
+          {
+            "id": "f1bca220-a05f-4efc-98be-f3e19dbe127b",
+            "azureResourceId": "/subscriptions/a07d2772-86b8-43de-8fef-44012abc2cf7/resourceGroups/rg-fabric-dev-indiasouth/providers/Microsoft.Storage/storageAccounts/nyctaxiyellowde",
+            "includedEventTypes": [
+              "Microsoft.Storage.BlobCreated"
+            ]
+          }
+        ],
+        "streamEvents": true
+      }
+    }
+  ],
+  "destinations": [],
+  "streams": [
+    {
+      "id": "bf98cb06-1cb2-4840-861d-c90130c9adfa",
+      "name": "new_event_stream-stream",
+      "type": "DefaultStream",
+      "properties": {},
+      "inputNodes": []
+    }
+  ],
+  "operators": [],
+  "compatibilityLevel": "1.1"
+}
