@@ -1,0 +1,76 @@
+# Fabric notebook source
+
+# METADATA ********************
+
+# META {
+# META   "kernel_info": {
+# META     "name": "synapse_pyspark"
+# META   },
+# META   "dependencies": {
+# META     "lakehouse": {
+# META       "default_lakehouse": "73009411-e4d2-4654-816f-a79e91b478cc",
+# META       "default_lakehouse_name": "lakehouse_tutorial_DE",
+# META       "default_lakehouse_workspace_id": "79a90b7b-f01a-4946-85b7-e7b75d8aa095",
+# META       "known_lakehouses": [
+# META         {
+# META           "id": "73009411-e4d2-4654-816f-a79e91b478cc"
+# META         }
+# META       ]
+# META     }
+# META   }
+# META }
+
+# CELL ********************
+
+from pyspark.sql.types import StringType
+from pyspark.sql.functions import col
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+path_orders = "Files/retail_dataset_de/orders"
+
+df_orders = spark.read.format("parquet").load(path_orders)
+
+df_orders.dtypes
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+df_orders = df_orders.withColumn("id",col("id").cast(StringType()))
+
+display(df_orders)
+
+df_orders.dtypes
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+df_orders = df_orders.select(col("id").cast(StringType()))
+
+df_orders.dtypes
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
